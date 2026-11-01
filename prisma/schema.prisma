@@ -1,0 +1,69 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(STAFF)
+}
+
+model RawMaterial {
+  id           String             @id @default(uuid())
+  name         String
+  unit         String             // e.g., kg, sheet
+  unitPrice    Float
+  currentStock Float              @default(0)
+  recipeItems  RecipeMaterial[]
+}
+
+model Product {
+  id           String             @id @default(uuid())
+  name         String             // Product or Car Model name
+  carModel     String?
+  sellingPrice Float
+  otherCosts   Float              @default(0) // Labour, transport, power
+  recipe       RecipeMaterial[]
+  production   ProductionRun[]
+  sales        Sale[]
+}
+
+model RecipeMaterial {
+  id           String      @id @default(uuid())
+  productId    String
+  product      Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  materialId   String
+  material     RawMaterial @relation(fields: [materialId], references: [id])
+  quantity     Float
+  wastePercent Float       @default(0)
+}
+
+model ProductionRun {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now())
+}
+
+model Sale {
+  id               String   @id @default(uuid())
+  productId        String
+  product          Product  @relation(fields: [productId], references: [id])
+  quantity         Int
+  sellingPrice     Float    // Price per unit at time of sale
+  unitCostAtSale   Float    // Snapshotted unit cost to preserve historical profit
+  soldAt           DateTime @default(now())
+}

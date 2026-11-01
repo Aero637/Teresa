@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "prisma": "^8.0.0-rc.29"
+  },
+  "scripts": {
+    "sync": "prisma db push"
+  }
+}

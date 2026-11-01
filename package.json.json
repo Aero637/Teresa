@@ -1,0 +1,19 @@
+{
+  "name": "thinkronix-2",
+  "version": "1.0.0",
+  "description": "Teresa full-stack project tracking system",
+  "main": "frontend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:push": "prisma db push"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "prisma": "^5.10.0"
+  }
+}
